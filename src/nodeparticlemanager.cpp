@@ -108,6 +108,26 @@ void NodeParticleManager::update_active(ofVec3f active){
     activeNode = active;
 }
 
+/*
+struct graph_node{
+    int point_index;
+    vector<int> near_indexes;
+    vector<float> near_weights;
+};*/
+
+void NodeParticleManager::update_nodes_from_nn(vector<ofVec3f> points, vector<graph_node> nodes ){
+    numNodes = points.size();
+    structure_nodes.resize(numNodes);
+    int i =0;
+    for (auto n : nodes){
+        structure_nodes[i].pos = points[n.point_index];
+        structure_nodes[i].is_linear = 0.;
+        structure_nodes[i].force = 1.;
+        i++;
+    }
+    nodesBuffer.updateData(structure_nodes);
+}
+
 
 void NodeParticleManager::update_nodes(vector<ofVec3f> main_points, vector<ofVec3f> intermediate_points, vector<ofVec3f> directions){
     numNodes = main_points.size()+ intermediate_points.size();

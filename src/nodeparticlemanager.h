@@ -3,7 +3,7 @@
 #include "ofxGui.h"
 #include "ofBufferObject.h"
 #include "ofMain.h"
-
+#include "randomdistributiongenerator.h"
 
 class NodeParticleManager
 {
@@ -17,6 +17,7 @@ public:
     void update_active(ofVec3f active);
     void update_nodes(vector<ofVec3f> , vector<ofVec3f>, vector<ofVec3f>);
     void updateNodesFromLines(vector<ofPolyline>);
+    void update_nodes_from_nn(vector<ofVec3f> points, vector<graph_node> nodes );
 
     struct Particle{
         ofVec4f pos;
@@ -27,8 +28,8 @@ public:
 
     struct Node{
         ofVec3f pos;
-        float force;
         ofVec3f direction;
+        float force;
         float is_linear;
     };
 
