@@ -143,7 +143,6 @@ void ofApp::updateNodes(){
     numNodes.set(nodes.size());
     particleManager.update_nodes_from_nn(points, nodes);
     //updateNodesFromLines(lines[MESH_INDEX]);
-
 }
 
 //--------------------------------------------------------------
@@ -152,7 +151,6 @@ void ofApp::keyPressed(int key){
     {
         MESH_INDEX = (MESH_INDEX +1)%distribution.get_num_subsets();
         updateNodes();
-
     }
 
     else if (key == 'f'){

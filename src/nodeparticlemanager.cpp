@@ -3,7 +3,7 @@
 
 NodeParticleManager::NodeParticleManager()
 {
-    compute.setupShaderFromFile(GL_COMPUTE_SHADER,"compute1.glsl");
+    compute.setupShaderFromFile(GL_COMPUTE_SHADER,"particle_node_compute.glsl");
     compute.linkProgram();
 
     maxSpeed = 300;
@@ -20,12 +20,12 @@ NodeParticleManager::NodeParticleManager()
 
     int i=0;
     for(auto & p: particles){
-        p.pos.x = ofRandom(0,500);
-        p.pos.y = ofRandom(0,500);
-        p.pos.z = ofRandom(0,500);
+        p.pos.x = ofRandom(-500,500);
+        p.pos.y = ofRandom(-500,500);
+        p.pos.z = ofRandom(-500,500);
         p.pos.w = 1;
         p.vel.set(0,0,0,0);
-        p.mass.set(ofRandom(1,10),0.,0.,0.);
+        p.mass_target_life.set(ofRandom(1,10),ofRandom(0,10),0.,0.);
         i++;
     }
 
@@ -48,7 +48,7 @@ NodeParticleManager::NodeParticleManager()
 
     vbo.setVertexBuffer(particlesBuffer,4,sizeof(Particle));
     vbo.setColorBuffer(particlesBuffer,sizeof(Particle),sizeof(ofVec4f)*2);
-    vbo.disableColors();
+    //vbo.disableColors();
     dirAsColor = false;
 
     particlesBuffer.bindBase(GL_SHADER_STORAGE_BUFFER, 0);
@@ -79,10 +79,10 @@ void NodeParticleManager::update(){
 
 void NodeParticleManager::draw(){
     ofSetColor(255,70);
-    glPointSize(5);
+    glPointSize(2);
     vbo.draw(GL_POINTS,0,particles.size());
     ofSetColor(255);
-    glPointSize(2);
+    glPointSize(1);
     vbo.draw(GL_POINTS,0,particles.size());
 
     if (draw_nodes){
@@ -91,12 +91,13 @@ void NodeParticleManager::draw(){
             if (n.is_linear ==1.){
                 if(n.force ==1.) ofSetColor(ofColor::blue, 150);
                 else ofSetColor(ofColor::red, 150);
-
                 ofDrawBox(n.pos, 5,5,5);
             }
 
             else {
-                ofSetColor(ofColor::green, 150);
+                ofSetColor(n.color);
+
+                //ofSetColor(ofColor::green, 150);
                 ofDrawSphere(n.pos, 5);
             }
 
@@ -120,12 +121,16 @@ void NodeParticleManager::update_nodes_from_nn(vector<ofVec3f> points, vector<gr
     structure_nodes.resize(numNodes);
     int i =0;
     for (auto n : nodes){
+        structure_nodes[i].color=ofFloatColor(ofRandomuf(), ofRandomuf(), ofRandomuf(), 0.5);
         structure_nodes[i].pos = points[n.point_index];
         structure_nodes[i].is_linear = 0.;
         structure_nodes[i].force = 1.;
+        structure_nodes[i].neighbour_indexes = ofVec4f(n.near_indexes[0],n.near_indexes[1], n.near_indexes[2],n.near_indexes[3]);
+        structure_nodes[i].neighbour_weights = ofVec4f(n.near_weights[0],n.near_weights[1], n.near_weights[2],n.near_weights[3]);
         i++;
     }
     nodesBuffer.updateData(structure_nodes);
+    //updateParticles();
 }
 
 
@@ -150,6 +155,15 @@ void NodeParticleManager::update_nodes(vector<ofVec3f> main_points, vector<ofVec
         counter++;
     }
     nodesBuffer.updateData(structure_nodes);
+    updateParticles();
+}
+
+void NodeParticleManager::updateParticles(){
+    for(auto & p: particles){
+        p.mass_target_life.set(ofRandom(1,10),ofRandom(0,numNodes),0.,0.);
+    }
+    particlesBuffer.updateData(particles);
+
 }
 
 

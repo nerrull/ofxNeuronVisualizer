@@ -16,6 +16,8 @@ public:
     void setParameters(ofParameterGroup pg);
     void update_active(ofVec3f active);
     void update_nodes(vector<ofVec3f> , vector<ofVec3f>, vector<ofVec3f>);
+    void updateParticles();
+
     void updateNodesFromLines(vector<ofPolyline>);
     void update_nodes_from_nn(vector<ofVec3f> points, vector<graph_node> nodes );
 
@@ -23,21 +25,23 @@ public:
         ofVec4f pos;
         ofVec4f vel;
         ofFloatColor color;
-        ofVec4f mass;
+        ofVec4f mass_target_life;
     };
 
     struct Node{
         ofVec3f pos;
-        ofVec3f direction;
         float force;
+        ofVec3f direction;
         float is_linear;
+        ofVec4f neighbour_indexes;
+        ofVec4f neighbour_weights;
+        ofFloatColor color;
+
     };
 
     vector<Particle> particles;
     vector<Node> structure_nodes;
     ofVec3f activeNode;
-
-
     ofShader compute;
     ofBufferObject particlesBuffer, particlesBuffer2, nodesBuffer;
     GLuint vaoID;
@@ -49,9 +53,6 @@ public:
     float nodeForce, activeNodeForce, linearForce;
     float repulsionCoeff, cohesionCoeff, frictionCoeff;
     int numNodes;
-
-
-
 };
 
 #endif // NODEPARTICLEMANAGER_H

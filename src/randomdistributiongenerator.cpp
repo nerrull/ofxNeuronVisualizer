@@ -141,14 +141,20 @@ vector<graph_node> RandomDistributionGenerator::get_weighted_nearest_neighbours(
         vector<float> distances;
         distances.resize(num_neighbours);
         float total_distance = 0.;
+
         for (size_t i = 1; i<results.size(); i++){
            float d=results[i].second;
            total_distance +=d;
            distances[i-1] =d;
            n.near_indexes.push_back(results[i].first);
         }
+        float sum= 0;
         for (auto d : distances){
-           n.near_weights.push_back(d/total_distance);
+           sum +=(total_distance - d)/total_distance;
+           n.near_weights.push_back(sum);
+        }
+        for (size_t i = 0; i< n.near_weights.size(); i++){
+           n.near_weights[i] =n.near_weights[i]/ sum;
         }
         neighbour_nodes.push_back(n);
     }
