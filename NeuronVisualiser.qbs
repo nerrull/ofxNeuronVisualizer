@@ -12,14 +12,14 @@ Project{
         name: { return FileInfo.baseName(path) }
 
         files: [
-            "bin/data/compute1.glsl",
-            "src/neuralconnectionrenderer.cpp",
-            "src/neuralconnectionrenderer.h",
+            "bin/data/particle_node_compute.glsl",
             "src/nodeparticlemanager.cpp",
             "src/nodeparticlemanager.h",
-            'src/main.cpp',
-            'src/ofApp.cpp',
-            'src/ofApp.h',
+            "src/main.cpp",
+            "src/ofApp.cpp",
+            "src/ofApp.h",
+            "src/randomdistributiongenerator.cpp",
+            "src/randomdistributiongenerator.h",
         ]
 
         of.addons: [

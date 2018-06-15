@@ -15,10 +15,10 @@ void ofApp::setup(){
 
     gui.setup();
     gui.add(fps.set("fps",60,0,60));
-    shaderUniforms.add(maxSpeed.set("max_speed",2500,0,5000));
-    shaderUniforms.add(activeNodeForce.set("active_node_force",100,0,5000));
-    shaderUniforms.add(nodeForce.set("node_force",100,0,5000));
-    shaderUniforms.add(linearForce.set("linear_force",100,0,5000));
+    shaderUniforms.add(maxSpeed.set("max_speed",500,0,1000));
+    shaderUniforms.add(activeNodeForce.set("active_node_force",0,0,5000));
+    shaderUniforms.add(nodeForce.set("node_force",2500,0,5000));
+    shaderUniforms.add(linearForce.set("linear_force",0,0,5000));
 
     shaderUniforms.add(repulsionCoeff.set("repulsion",0.1,0,1));
     shaderUniforms.add(cohesionCoeff.set("cohesion",0.05,0,1));
@@ -26,6 +26,8 @@ void ofApp::setup(){
     shaderUniforms.add(numNodes.set("num_nodes",16,0,1024));
     shaderUniforms.add(showNodes.set("show_nodes", false));
     shaderUniforms.add(showLines.set("show_lines", false));
+    shaderUniforms.add(simpleAOE.set("simple_aoe", 5, 0,50));
+
 
 
     gui.add(shaderUniforms);
@@ -38,8 +40,6 @@ void ofApp::setup(){
 void ofApp::update(){
 
     fps = ofGetFrameRate();
-    activeNode.set(ofGetWidth()/4,ofGetHeight()/4,250.);
-    particleManager.update_active(activeNode);
     particleManager.setParameters(shaderUniforms);
     particleManager.update();
 
@@ -87,8 +87,7 @@ void ofApp::draw(){
 
 
     ofEnableBlendMode(OF_BLENDMODE_ADD);
-    ofSetColor(ofColor::red);
-    ofDrawSphere(activeNode,20);
+
     particleManager.draw();
 
     ofPopMatrix();

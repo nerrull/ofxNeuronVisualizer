@@ -97,7 +97,7 @@ void RandomDistributionGenerator::initData(int data_dims, int num_points){
         }
     }
 
-    float data_step = 0.05;
+    float data_step = 0.01;
     float num_meshes = 1.0/data_step;
 
     //for (int i = 0; i < data_dims; i++){

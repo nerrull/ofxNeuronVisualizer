@@ -20,6 +20,8 @@ public:
 
     void updateNodesFromLines(vector<ofPolyline>);
     void update_nodes_from_nn(vector<ofVec3f> points, vector<graph_node> nodes );
+    void generate_intermediate_nodes(vector<ofVec3f> points, vector<graph_node> nodes);
+
 
     struct Particle{
         ofVec4f pos;
@@ -39,11 +41,16 @@ public:
 
     };
 
+    struct SimpleNode{
+        ofVec4f pos;
+    };
+
     vector<Particle> particles;
     vector<Node> structure_nodes;
+    vector<SimpleNode> simple_nodes;
     ofVec3f activeNode;
     ofShader compute;
-    ofBufferObject particlesBuffer, particlesBuffer2, nodesBuffer;
+    ofBufferObject particlesBuffer, particlesBuffer2, nodesBuffer, simpleNodesBuffer;
     GLuint vaoID;
     ofVbo vbo;
     bool dirAsColor;
@@ -53,6 +60,11 @@ public:
     float nodeForce, activeNodeForce, linearForce;
     float repulsionCoeff, cohesionCoeff, frictionCoeff;
     int numNodes;
+    int numSimpleNodes;
+    int num_particles;
+    int simple_aoe;
+
+
 };
 
 #endif // NODEPARTICLEMANAGER_H

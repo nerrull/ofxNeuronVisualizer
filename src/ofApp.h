@@ -49,6 +49,8 @@ public:
     ofParameter<float> nodeForce, activeNodeForce, linearForce;
     ofParameter<float> repulsionCoeff, cohesionCoeff, frictionCoeff;
     ofParameter<int> numNodes;
+    ofParameter<int> simpleAOE;
+
     ofParameter<bool> showNodes, showLines;
     NodeParticleManager particleManager;
     RandomDistributionGenerator distribution;
